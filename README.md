@@ -41,7 +41,7 @@ A web-based application designed to help small businesses manage and organize cu
 
 ## Installation
 
-1. Clone the repository - https://github.com/TLawson216/appointment-scheduling-system.
+1. Clone the repository 
 2. Navigate into the project directory - cd appointment-scheduling-system
 3. Install dependencies - pip install -r requirements.txt
 4. Run the application - python app.py
