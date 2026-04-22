@@ -51,12 +51,26 @@ def schedule():
     conn = sqlite3.connect('database/database.db')
     cursor = conn.cursor()
 
-    cursor.execute("SELECT name, date, time FROM appointments")
+    cursor.execute("SELECT id, name, date, time FROM appointments")
     appointments = cursor.fetchall()
 
     conn.close()
 
     return render_template("schedule.html", appointments=appointments)
+@app.route("/delete/<int:id>", methods=["POST"])
+def delete(id):
+    conn = sqlite3.connect('database/database.db')
+    cursor = conn.cursor()
+
+    cursor.execute("DELETE FROM appointments WHERE id=?", (id,))
+
+    conn.commit()
+    conn.close()
+
+    return redirect("/schedule")
+
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
