@@ -6,18 +6,18 @@
 <body>
 
 <h2> Booking Appointment</h2>
-<form action="/schedule">
+<form method="POST" action="/book">
 
-<label>Name:</label>
-<input type="text"><br><br>
+    <label>Name:</label>
+    <input type="text" name="name"><br><br>
 
-<label>Date:</label>
-<input type="date"><br><br>
+    <label>Date:</label>
+    <input type="date" name="date"><br><br>
 
-<label>Time:</label>
-<input type="time"><br><br>
+    <label>Time:</label>
+    <input type="time" name="time"><br><br>
 
-<button type="submit">Book</button>
+    <button type="submit">Book</button>
 
 </form>
 
