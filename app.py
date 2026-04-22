@@ -22,11 +22,23 @@ def book():
         conn = sqlite3.connect('database/database.db')
         cursor = conn.cursor()
 
+        #Check for existing appointments
         cursor.execute(
-            "INSERT INTO appointments (name, date, time) VALUES (?, ?, ?)",
-            (name, date, time)
+            "SELECT * FROM appointments WHERE date=? AND time=?",
+            (date, time)
         )
 
+        existing = cursor.fetchone()
+
+        if existing:
+            conn.close()
+            return "Time slot unavailable. Please choose another time."
+        # If no conflict, insert appointments
+        cursor.execute( 
+            "INSERT INTO appointments (name, date, time) VALUES (?, ?, ?)",
+            (name, date, time)
+)
+        
         conn.commit()
         conn.close()
 
