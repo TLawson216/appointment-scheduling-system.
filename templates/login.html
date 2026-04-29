@@ -7,14 +7,19 @@
 <body>
 
 <h2> Appointment System Login</h2>
-<form action="/book">
-    <label> Email: </label>
-    <input type="text"><br><br>
+<form method="POST" action="/">
+    <label>Username:</label>
+    <input type="text" name="username" required><br><br>
 
-    <label> Password:</label>
-    <input type="password"><br><br>
+    <label>Passowrd:</label>
+    <input type="text" name="password" required><br><br>
 
-    <button type="submit"> Login</button>
+    <button type="submit">Login</button>
+
 </form>
+<p>Don't have an account? <a href="/register">Register here</a></p>
+{% if error %}
+    <p style="color:red;">{{ error }}</p>
+{% endif %}
 </body>    
 </html>

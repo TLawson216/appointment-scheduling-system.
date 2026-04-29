@@ -5,8 +5,36 @@ from database.db import init_db
 app = Flask(__name__ )
 init_db()
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 def login():
+    if request.method == "POST":
+       username = request.form["username"] 
+       password = request.form["password"] 
+        
+       print("INPUT:", username, password)
+
+       conn = sqlite3.connect('database/database.db')
+       cursor = conn.cursor()
+
+       cursor.execute("SELECT * FROM users")
+       all_users = cursor.fetchall()
+       print("ALL USERS:", all_users)
+
+       cursor.execute(
+           "SELECT * FROM users WHERE username=? and password=?",
+           (username, password)
+       ) 
+
+       user = cursor.fetchone()
+       print("MATCH:", user)
+
+       conn.close()
+
+       if user:
+           return redirect("/book")
+       else:
+           return render_template("login.html", error="Invalid login")
+                
     return render_template("login.html")
 
 from flask import request, redirect
@@ -69,6 +97,38 @@ def delete(id):
 
     return redirect("/schedule")
 
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+
+        print("REGISTER INPUT:", username, password)
+
+        conn = sqlite3.connect('database/database.db')
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT * FROM users WHERE username=?", (username,))
+        existing_user = cursor.fetchone()
+        print("EXISTING USER:", existing_user)
+
+        if existing_user:
+            conn.close()
+            print("USER ALREADY EXISTS")
+            return render_template("register.html", error="User already exists")
+
+        cursor.execute(
+            "INSERT INTO users (username, password) VALUES (?, ?)",
+            (username, password)
+        )
+        print("INSERTED USER")  # 👈 IMPORTANT
+
+        conn.commit()
+        conn.close()
+
+        return redirect("/")
+
+    return render_template("register.html")
 
 
 
