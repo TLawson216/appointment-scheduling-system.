@@ -29,7 +29,8 @@ def init_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT,
             date TEXT,
-            time TEXT
+            time TEXT,
+            description TEXT
         )
     ''')
 

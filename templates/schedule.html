@@ -26,6 +26,7 @@
             <th>Name</th>
             <th>Date</th>
             <th>Time</th>
+            <th>Description</th>
             <th>Action</th>
         </tr>
 
@@ -34,6 +35,7 @@
             <td>{{ appt[1] }}</td>
             <td>{{ appt[2] }}</td>
             <td>{{ appt[3] }}</td>
+            <td>{{ appt[4] }}</td>
             <td>
                 <form method="POST" action="/delete/{{ appt[0] }}">
                     <button class="delete-btn">Delete</button>

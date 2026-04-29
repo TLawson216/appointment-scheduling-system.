@@ -52,6 +52,7 @@ def book():
         name = request.form["name"]
         date = request.form["date"]
         time = request.form["time"]
+        description = request.form["description"]
 
         conn = sqlite3.connect('database/database.db')
         cursor = conn.cursor()
@@ -69,8 +70,8 @@ def book():
             return render_template("book.html", error="Time slot already booked!")
         # If no conflict, insert appointments
         cursor.execute( 
-            "INSERT INTO appointments (name, date, time) VALUES (?, ?, ?)",
-            (name, date, time)
+            "INSERT INTO appointments (name, date, time, description) VALUES (?, ?, ?, ?)",
+            (name, date, time, description)
 )
         
         conn.commit()
@@ -87,10 +88,11 @@ def schedule():
     conn = sqlite3.connect('database/database.db')
     cursor = conn.cursor()
 
-    cursor.execute("SELECT id, name, date, time FROM appointments")
+    cursor.execute("SELECT id, name, date, time, description FROM appointments")
     appointments = cursor.fetchall()
 
     conn.close()
+    print(appointments)
 
     return render_template("schedule.html", appointments=appointments)
 @app.route("/delete/<int:id>", methods=["POST"])
