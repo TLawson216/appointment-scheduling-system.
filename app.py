@@ -1,8 +1,9 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, session
 from database.db import init_db
 
 
 app = Flask(__name__ )
+app.secret_key = "supersecretkey"
 init_db()
 
 @app.route("/", methods=["GET", "POST"])
@@ -31,9 +32,11 @@ def login():
        conn.close()
 
        if user:
-           return redirect("/book")
+          session["user"] = username
+          return redirect("/book")
        else:
            return render_template("login.html", error="Invalid login")
+       
                 
     return render_template("login.html")
 
@@ -42,6 +45,9 @@ import sqlite3
 
 @app.route("/book", methods=["GET", "POST"])
 def book():
+    if "user" not in session:
+        return redirect("/")
+   
     if request.method == "POST":
         name = request.form["name"]
         date = request.form["date"]
@@ -76,6 +82,8 @@ def book():
 
 @app.route("/schedule")
 def schedule():
+    if "user" not in session:
+        return redirect("/")
     conn = sqlite3.connect('database/database.db')
     cursor = conn.cursor()
 
@@ -129,6 +137,11 @@ def register():
         return redirect("/")
 
     return render_template("register.html")
+
+@app.route("/logout")
+def logout():
+    session.pop("user", None)
+    return redirect("/")
 
 
 
