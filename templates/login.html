@@ -5,21 +5,36 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+<div class="navbar">
+    <div>Appointment System</div>
+    <div>
+        <a href="/">Login</a>
+        <a href="/book">Book</a>
+        <a href="/schedule">Schedule</a>
+    </div>
+</div>
 
-<h2> Appointment System Login</h2>
-<form method="POST" action="/">
-    <label>Username:</label>
-    <input type="text" name="username" required><br><br>
+<div class="container">
+    <!-- your login form -->
+</div>
 
-    <label>Passowrd:</label>
-    <input type="text" name="password" required><br><br>
+<div class="container">
+    <h2>Appointment System Login</h2>
 
-    <button type="submit">Login</button>
+    <form method="POST" action="/">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
 
-</form>
-<p>Don't have an account? <a href="/register">Register here</a></p>
-{% if error %}
-    <p style="color:red;">{{ error }}</p>
-{% endif %}
+        <button type="submit">Login</button>
+    </form>
+
+    <p>Don't have an account? <a href="/register">Register here</a></p>
+
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% endif %}
+</div>
+
+
 </body>    
 </html>

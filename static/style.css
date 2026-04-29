@@ -1,21 +1,22 @@
 body {
+   
     font-family: Arial, sans-serif;
     background-color: #f4f6f8;
     margin: 0;
     padding: 0;
 }
 
-/* Container */
+/* Center container */
 .container {
-    width: 400px;
-    margin: 60px auto;
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 30px;
     background: white;
-    padding: 25px;
     border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-/* Headings */
+/* Title */
 h2 {
     text-align: center;
     margin-bottom: 20px;
@@ -25,48 +26,59 @@ h2 {
 input {
     width: 100%;
     padding: 10px;
-    margin: 8px 0;
-    border-radius: 6px;
+    margin-bottom: 15px;
     border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
 }
 
-/* Buttons */
+input:focus {
+    outline: none;
+    border-color: #007BFF;
+}
+
+/* Button */
 button {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     background-color: #007BFF;
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 5px;
+    font-size: 16px;
     cursor: pointer;
-    margin-top: 10px;
 }
 
 button:hover {
     background-color: #0056b3;
 }
 
-/* Table */
-table {
-    width: 80%;
-    margin: 30px auto;
+/* Register link */
+p {
+    text-align: center;
+    font-size: 14px;
+}
+/* Table styling */
+.appt-table {
+    width: 100%;
     border-collapse: collapse;
-    background: white;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    margin-top: 20px;
 }
 
-th, td {
+.appt-table th,
+.appt-table td {
     padding: 12px;
     text-align: center;
+    border-bottom: 1px solid #ddd;
 }
 
-th {
+.appt-table th {
     background-color: #007BFF;
     color: white;
 }
 
-tr:nth-child(even) {
-    background-color: #f2f2f2;
+.appt-table tr:hover {
+    background-color: #f1f1f1;
 }
 
 /* Delete button */
@@ -76,4 +88,25 @@ tr:nth-child(even) {
 
 .delete-btn:hover {
     background-color: #a71d2a;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #007BFF;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+
+.navbar a {
+    color: white;
+    margin-left: 15px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.navbar a:hover {
+    text-decoration: underline;
 }

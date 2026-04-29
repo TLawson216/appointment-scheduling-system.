@@ -60,7 +60,7 @@ def book():
 
         if existing:
             conn.close()
-            return "Time slot unavailable. Please choose another time."
+            return render_template("book.html", error="Time slot already booked!")
         # If no conflict, insert appointments
         cursor.execute( 
             "INSERT INTO appointments (name, date, time) VALUES (?, ?, ?)",

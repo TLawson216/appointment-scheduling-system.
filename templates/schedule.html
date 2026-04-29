@@ -1,38 +1,51 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Schedule</title>
+    <title>Appointments</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-<h2>Appointments</h2>
+<div class="navbar">
+    <div>Appointment System</div>
+    <div>
+        <a href="/">Login</a>
+        <a href="/book">Book</a>
+        <a href="/schedule">Schedule</a>
+    </div>
+</div>
 
-<h2 style="text-align:center;">Appointments</h2>
+<div class="container">
+    <!-- your login form -->
+</div>
+<div class="container">
+    <h2>Appointments</h2>
 
-<table>
-<tr>
-    <th>Name</th>
-    <th>Date</th>
-    <th>Time</th>
-    <th>Action</th>
-</tr>
+    <table class="appt-table">
+        <tr>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Action</th>
+        </tr>
 
-{% for appt in appointments %}
-<tr>
-    <td>{{ appt[1] }}</td>
-    <td>{{ appt[2] }}</td>
-    <td>{{ appt[3] }}</td>
-    <td>
-        <form method="POST" action="/delete/{{ appt[0] }}">
-            <button class="delete-btn" onclick="return confirm('Are you sure?')">
-                Delete
-            </button>
-        </form>
-    </td>
-</tr>
-{% endfor %}
-</table>
+        {% for appt in appointments %}
+        <tr>
+            <td>{{ appt[1] }}</td>
+            <td>{{ appt[2] }}</td>
+            <td>{{ appt[3] }}</td>
+            <td>
+                <form method="POST" action="/delete/{{ appt[0] }}">
+                    <button class="delete-btn">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+    <a href="/book"><button>Add Appointment</button></a>
+</div>
 
 </body>
 </html>
