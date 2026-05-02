@@ -13,7 +13,14 @@
     <input type="text" name="username" placeholder="Choose username" required><br><br>
     <input type="password" name="password" placeholder="Choose password" required><br><br>
     <button type="submit">Register</button>
+    <select name="role">
+        <option value="user">User</option>
+        <option value="business">Business Owner</option>
+
+    </select>
+    
 </form>
+
 
 {% if error %}
 <p style="color:red;">{{ error }}</p>

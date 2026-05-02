@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Appointments</title>
+    <title>Business Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
 
-<!--  NAVBAR -->
+<!-- NAVBAR -->
 <div class="navbar">
     <div class="logo">Appointment System</div>
     <div class="nav-links">
-        <a href="/user">Home</a>
-        <a href="/schedule">Schedule</a>
+        <a href="/business">Dashboard</a>
         <a href="/logout">Logout</a>
     </div>
 </div>
 
-<!--  MAIN CARD -->
+<!-- MAIN CONTENT -->
 <div class="container">
-    <h2 style="text-align:center;">Appointments</h2>
+    <h2 style="text-align:center;">Your Appointments</h2>
 
     <table class="styled-table">
         <tr>
@@ -27,7 +27,6 @@
             <th>Time</th>
             <th>Description</th>
             <th>Status</th>
-            <th>Reason</th>
             <th>Action</th>
         </tr>
 
@@ -38,7 +37,7 @@
             <td>{{ appt[3] }}</td>
             <td>{{ appt[4] }}</td>
 
-            <!--  STATUS -->
+            <!-- STATUS -->
             <td>
                 {% if appt[5] == "Cancelled" %}
                     <span style="color:red; font-weight:bold;">Cancelled</span>
@@ -47,23 +46,20 @@
                 {% endif %}
             </td>
 
-            <!--  REASON -->
-            <td>{{ appt[6] if appt[6] else "-" }}</td>
-
-            <!--  ACTION -->
+            <!-- ACTION -->
             <td>
-                <form method="POST" action="/delete/{{ appt[0] }}">
-                    <button class="delete-btn">Delete</button>
+                {% if appt[5] != "Cancelled" %}
+                <form method="POST" action="/cancel/{{ appt[0] }}">
+                    <input type="text" name="reason" placeholder="Reason..." required>
+                    <button class="cancel-btn">Cancel</button>
                 </form>
+                {% else %}
+                    -
+                {% endif %}
             </td>
         </tr>
         {% endfor %}
     </table>
-
-    <!-- BUTTON -->
-    <a href="/user">
-        <button class="primary-btn">Add Appointment</button>
-    </a>
 </div>
 
 </body>

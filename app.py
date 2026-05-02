@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, session
+import sqlite3
 from database.db import init_db
 
 
@@ -33,7 +34,8 @@ def login():
 
        if user:
           session["user"] = username
-          return redirect("/book")
+          session["role"] =user[3]
+          return redirect("/dashboard")
        else:
            return render_template("login.html", error="Invalid login")
        
@@ -41,13 +43,13 @@ def login():
     return render_template("login.html")
 
 from flask import request, redirect
-import sqlite3
 
-@app.route("/book", methods=["GET", "POST"])
-def book():
+
+@app.route("/book/<int:business_id>", methods=["GET", "POST"])
+def book(business_id):
     if "user" not in session:
         return redirect("/")
-   
+
     if request.method == "POST":
         name = request.form["name"]
         date = request.form["date"]
@@ -57,29 +59,34 @@ def book():
         conn = sqlite3.connect('database/database.db')
         cursor = conn.cursor()
 
-        #Check for existing appointments
+        # Check for existing appointments (FOR THIS BUSINESS ONLY)
         cursor.execute(
-            "SELECT * FROM appointments WHERE date=? AND time=?",
-            (date, time)
+            "SELECT * FROM appointments WHERE date=? AND time=? AND business_id=?",
+            (date, time, business_id)
         )
 
         existing = cursor.fetchone()
 
         if existing:
             conn.close()
-            return render_template("book.html", error="Time slot already booked!")
-        # If no conflict, insert appointments
-        cursor.execute( 
-            "INSERT INTO appointments (name, date, time, description) VALUES (?, ?, ?, ?)",
-            (name, date, time, description)
-)
-        
+            return render_template(
+                "book.html",
+                error="Time slot already booked!",
+                business_id=business_id
+            )
+
+        # Insert appointment
+        cursor.execute(
+            "INSERT INTO appointments (name, date, time, description, business_id) VALUES (?, ?, ?, ?, ?)",
+            (name, date, time, description, business_id)
+        )
+
         conn.commit()
         conn.close()
 
         return redirect("/schedule")
 
-    return render_template("book.html")
+    return render_template("book.html", business_id=business_id)
 
 @app.route("/schedule")
 def schedule():
@@ -88,7 +95,7 @@ def schedule():
     conn = sqlite3.connect('database/database.db')
     cursor = conn.cursor()
 
-    cursor.execute("SELECT id, name, date, time, description FROM appointments")
+    cursor.execute("SELECT id, name, date, time, description, status, cancel_reason FROM appointments")
     appointments = cursor.fetchall()
 
     conn.close()
@@ -112,6 +119,7 @@ def register():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
+        role = request.form["role"]
 
         print("REGISTER INPUT:", username, password)
 
@@ -128,8 +136,8 @@ def register():
             return render_template("register.html", error="User already exists")
 
         cursor.execute(
-            "INSERT INTO users (username, password) VALUES (?, ?)",
-            (username, password)
+            "INSERT INTO users (username, password, role) VALUES (?, ?, ?)",
+            (username, password,role)
         )
         print("INSERTED USER")  # 👈 IMPORTANT
 
@@ -145,7 +153,73 @@ def logout():
     session.pop("user", None)
     return redirect("/")
 
+@app.route("/dashboard")
+def dashboard():
+    if "user" not in session:
+        return redirect("/")
 
+    if session["role"] == "business":
+        return redirect("/business")
+    else:
+        return redirect("/user")
+    
+@app.route("/user")
+def user_view():
+    if "user" not in session:
+        return redirect("/")
+
+    conn = sqlite3.connect('database/database.db')
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT id, username FROM users WHERE role='business'")
+    businesses = cursor.fetchall()
+
+    conn.close()
+
+    return render_template("user.html", businesses=businesses)
+
+@app.route("/business")
+def business_view():
+    if "user" not in session:
+        return redirect("/")
+
+    conn = sqlite3.connect('database/database.db')
+    cursor = conn.cursor()
+
+    # get business id
+    cursor.execute("SELECT id FROM users WHERE username=?", (session["user"],))
+    business = cursor.fetchone()
+
+    cursor.execute(
+    "SELECT id, name, date, time, description, status, cancel_reason FROM appointments WHERE business_id=?",
+    (business[0],)
+)
+
+    appointments = cursor.fetchall()
+
+    conn.close()
+
+    return render_template("business.html", appointments=appointments)
+
+@app.route("/cancel/<int:id>", methods=["POST"])
+def cancel(id):
+    if "user" not in session:
+        return redirect("/")
+
+    reason = request.form["reason"]
+
+    conn = sqlite3.connect('database/database.db')
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "UPDATE appointments SET status='Cancelled', cancel_reason=? WHERE id=?",
+        (reason, id)
+    )
+
+    conn.commit()
+    conn.close()
+
+    return redirect("/business")
 
 if __name__ == "__main__":
     app.run(debug=True)

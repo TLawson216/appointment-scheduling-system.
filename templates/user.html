@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Select Business</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo">Appointment System</div>
+    <div class="nav-links">
+        <a href="/user">Home</a>
+        <a href="/schedule">Schedule</a>
+        <a href="/logout">Logout</a>
+    </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="container">
+    <h2 style="text-align:center;">Select a Business</h2>
+
+    <ul style="list-style:none; padding:0;">
+        {% for b in businesses %}
+        <li style="margin:10px 0;">
+            <a href="/book/{{ b[0] }}" class="primary-btn" style="display:block; text-align:center;">
+                {{ b[1] }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+</body>
+</html>

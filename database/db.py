@@ -10,7 +10,8 @@ def init_db():
         CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT,
-        password TEXT
+        password TEXT,
+        role TEXT
         )
     ''')
     
@@ -30,7 +31,10 @@ def init_db():
             name TEXT,
             date TEXT,
             time TEXT,
-            description TEXT
+            description TEXT,
+            business_id INTEGER,
+            status TEXT,
+            cancel_reason TEXT
         )
     ''')
 

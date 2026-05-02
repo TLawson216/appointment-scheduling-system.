@@ -11,7 +11,7 @@
     <div>Appointment System</div>
     <div>
         
-        <a href="/book">Book</a>
+        <a href="/user">Book</a>
         <a href="/schedule">Schedule</a>
         <a href="/logout">Logout</a>
 
@@ -29,7 +29,7 @@
     </div>
     {% endif %}
 
-    <form method="POST" action="/book">
+    <form method="POST" action="/book/{{ business_id }}">
         <input type="text" name="name" placeholder="Enter your name">
         <input type="date" name="date">
         <input type="time" name="time">
